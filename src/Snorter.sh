@@ -16,10 +16,8 @@ NOCOLOR='\033[0m'
 BOLD='\033[1m'
 
 function update_upgrade() {
-
 	echo -ne "\n\t${CYAN}[i] INFO:${NOCOLOR} Updating and Upgrading repositories...\n\n"
 	sudo apt-get update && sudo apt-get upgrade -y --force-yes
-
 }
 
 function snort_install() {
@@ -223,9 +221,9 @@ function barnyard2_install() {
 	echo -ne "\n\n"
 
 	#sudo /etc/init.d/mysql start > /dev/null 2>&1
-	echo "create database snort;" | mysql -u root -p -h 10.0.100.35
-	mysql -u root -p -h 10.0.100.35 -D snort < $HOME/snort_src/barnyard2/schemas/create_mysql
-	echo "grant create, insert, select, delete, update on snort.* to 'snort'@'localhost' identified by '$SNORTSQLPASSWORD'" | mysql -u root -p -h 10.0.100.35
+	echo "create database snort;" | mysql -u jpartain89 -p -h 10.0.100.35
+	mysql -u jpartain89 -p -h 10.0.100.35 -D snort < $HOME/snort_src/barnyard2/schemas/create_mysql
+	echo "grant create, insert, select, delete, update on snort.* to 'snort'@'%' identified by '$SNORTSQLPASSWORD'" | mysql -u jpartain89 -p -h 10.0.100.35
 
 	sudo echo "output database: log, mysql, user=snort password=$SNORTSQLPASSWORD dbname=snort host=10.0.100.35" >> /etc/snort/barnyard2.conf
 	sudo chmod 766 /etc/snort/barnyard2.conf
