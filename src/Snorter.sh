@@ -186,7 +186,7 @@ function barnyard2_install() {
 	echo -ne "\n\t${YELLOW}[!] WARNING:${NOCOLOR} Press ${BOLD}ENTER${NOCOLOR} to continue. "
 	read -n 1 -s
 
-	sudo apt-get install -y --force-yes mysql-server libmysqlclient-dev mysql-client autoconf libtool libdnet checkinstall yagiuda libdnet-dev locate
+	sudo apt-get install -y --force-yes libmysqlclient-dev mysql-client autoconf libtool libdnet checkinstall yagiuda libdnet-dev locate
 
 	cd $HOME/snort_src
 	echo -ne "\n\t${CYAN}[i] INFO:${NOCOLOR} Downloading ${BOLD}BARNYARD2${NOCOLOR}.\n\n"
@@ -222,12 +222,12 @@ function barnyard2_install() {
 	read -n 1 -s
 	echo -ne "\n\n"
 
-	sudo /etc/init.d/mysql start > /dev/null 2>&1
-	echo "create database snort;" | mysql -u root -p
-	mysql -u root -p -D snort < $HOME/snort_src/barnyard2/schemas/create_mysql
-	echo "grant create, insert, select, delete, update on snort.* to 'snort'@'localhost' identified by '$SNORTSQLPASSWORD'" | mysql -u root -p
+	#sudo /etc/init.d/mysql start > /dev/null 2>&1
+	echo "create database snort;" | mysql -u root -p -h 10.0.100.35
+	mysql -u root -p -h 10.0.100.35 -D snort < $HOME/snort_src/barnyard2/schemas/create_mysql
+	echo "grant create, insert, select, delete, update on snort.* to 'snort'@'localhost' identified by '$SNORTSQLPASSWORD'" | mysql -u root -p -h 10.0.100.35
 
-	sudo echo "output database: log, mysql, user=snort password=$SNORTSQLPASSWORD dbname=snort host=localhost" >> /etc/snort/barnyard2.conf
+	sudo echo "output database: log, mysql, user=snort password=$SNORTSQLPASSWORD dbname=snort host=10.0.100.35" >> /etc/snort/barnyard2.conf
 	sudo chmod 766 /etc/snort/barnyard2.conf
 	sudo chmod o-r /etc/snort/barnyard2.conf
 
